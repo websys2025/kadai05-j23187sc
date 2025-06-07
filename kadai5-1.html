@@ -17,21 +17,15 @@
             const zipcode = myForm.zipcode.value.trim();
             const aRes = await fetch(endpoint+ "?zipcode=" + myForm.zipcode.value );
             const data = await aRes.text();
-         try {
-                const url = `${endpoint}?zipcode=${encodeURIComponent(zipcode)}`;
-                const response = await fetch(url);
-                const json = await response.json();
-
-                if (json.status === 200 && json.results) {
-                    const result = json.results[0];
-                    const address = `${result.address1}${result.address2}${result.address3}`;
-                    document.getElementById("result").innerHTML = `住所: ${address}`;
-                } else {
-                    document.getElementById("result").innerHTML = `エラー: ${json.message || "該当する住所が見つかりませんでした。"}`;
-                }
-            } catch (error) {
-                document.getElementById("result").innerHTML = `通信エラー: ${error}`;
-            }
+            const url = `${endpoint}?zipcode=${encodeURIComponent(zipcode)}`;
+            const response = await fetch(url);
+            const json = await response.json();
+            if (data.status === 200 && data.results) {
+                const result = data.results[0];
+                document.getElementById("result").innerHTML = 
+                    `住所: ${result.address1} ${result.address2} ${result.address3}
+                    }
+                
                  
             // zipcloudのAPI呼び出して結果を表示する
             document.getElementById("result").innerHTML =  myForm.zipcode.value; // 現状ではそのまま表示しているだけ
