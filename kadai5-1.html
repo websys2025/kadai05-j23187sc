@@ -8,15 +8,16 @@
     <form name="apiform"><p>
         郵便番号：<input type="text" name="zipcode">
         <button type="button" id="btn1" onclick="zip_api(this.form)">実行</button>
-    </p></form>
+    </p>
+    </form>
     
     <div id="result">結果はここに表示</div>
     <script>
         async function zip_api(myForm){
             const endpoint = "https://zipcloud.ibsnet.co.jp/api/search";
             const zipcode = myForm.zipcode.value.trim();
-　　　　　　　const url = endpoint + "?zipcode=" + zipcode;
-            
+
+            const url = `${endpoint}?zipcode=${encodeURIComponent(zipcode)}`;
             try {
                 const response = await fetch(url);
                 const data = await response.json();
