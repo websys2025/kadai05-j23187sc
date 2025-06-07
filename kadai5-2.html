@@ -1,22 +1,51 @@
 <html lang="ja">
 <head>
     <meta charset="utf-8">
-    <title>演習課題5-2：外部APIの呼び出しテスト</title>
+    <title>演習課題5-2：HelloSalut APIテスト</title>
 </head>
 <body>
-    <h1 id="msg">何かのAPI</h1>
+    <h1 id="msg">挨拶取得APIテスト</h1>
     <form name="apiform"><p>
-        何かのフォーム：<input type="text" name="form_data">
-        <button type="button" id="btn1" onclick="some_api(this.form)">実行</button>
+        IPアドレス：<input type="text" name="ip" placeholder="例: 8.8.8.8" required><br>
+        言語コード：<input type="text" name="lang" placeholder="例: en" required>
+        <button type="button" onclick="greet_api(this.form)">実行</button>
     </p></form>
     
     <div id="result"></div>
+
     <script>
-        async function some_api(myForm) {
-            // ここにコードを書く
-            document.getElementById("result").innerHTML += myForm.form_data.value+"<br />";
-            document.apiform.reset();
+        async function greet_api(myForm) {
+            const resultDiv = document.getElementById("result");
+            const ip = myForm.ip.value.trim();
+            const lang = myForm.lang.value.trim();
+
+            if (!ip || !lang) {
+                resultDiv.innerHTML = '<span class="error">IPアドレスと言語コードの両方を入力してください。</span>';
+                return;
+            }
+
+            resultDiv.innerHTML = "読み込み中...";
+
+            try {
+                const url = `http://stefanbohacek.com/hellosalut/?lang=${lang}&ip=${ip}`;
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTPエラー: ${response.status}`);
+                }
+                const data = await response.json();
+
+                if (data.hello) {
+                    resultDiv.innerHTML = `挨拶（${lang}, IP: ${ip}）: <strong>${data.hello}</strong>`;
+                } else {
+                    resultDiv.innerHTML = "挨拶が取得できませんでした。";
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<span class="error">エラーが発生しました: ${error.message}</span>`;
+            }
+
+            myForm.reset();
         }
     </script>
 </body>
 </html>
+
