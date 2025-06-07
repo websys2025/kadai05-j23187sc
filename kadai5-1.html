@@ -15,8 +15,8 @@
         async function zip_api(myForm){
             const endpoint = "https://zipcloud.ibsnet.co.jp/api/search";
             const zipcode = myForm.zipcode.value.trim();
-
-            const url = `${endpoint}?zipcode=${encodeURIComponent(zipcode)}`;
+　　　　　　　const url = endpoint + "?zipcode=" + zipcode;
+            
             try {
                 const response = await fetch(url);
                 const data = await response.json();
